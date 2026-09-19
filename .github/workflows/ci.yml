@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_ANALYTICS: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test release updates
+        run: python3 -m unittest discover -s tests -v
+      - name: Register checkout as a tap
+        run: |
+          brew update
+          tap_directory="$(brew --repository)/Library/Taps/laixintao/homebrew-tap"
+          mkdir -p "$(dirname "$tap_directory")"
+          ln -s "$GITHUB_WORKSPACE" "$tap_directory"
+      - name: Check cask style and syntax
+        run: |
+          brew style "$PWD"/Casks/*.rb
+          for cask in Casks/*.rb; do
+            ruby -c "$cask"
+          done
+      - name: Audit cask definitions
+        run: brew audit --cask --strict --skip-style --tap=laixintao/tap
+      - name: Install and uninstall all apps
+        run: |
+          brew install --cask --appdir="$RUNNER_TEMP/Applications" \
+            laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop
+          brew uninstall --cask \
+            laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop

@@ -1,0 +1,28 @@
+{
+  "ontop": {
+    "repository": "laixintao/ontop",
+    "include_prereleases": false,
+    "assets": {
+      "universal": "OnTop-{version}-universal.dmg"
+    },
+    "checksums": "SHA256SUMS"
+  },
+  "keycraft": {
+    "repository": "laixintao/keycraft",
+    "include_prereleases": true,
+    "assets": {
+      "arm": "keycraft-{version}-macos-arm64.dmg",
+      "intel": "keycraft-{version}-macos-x64.dmg"
+    },
+    "checksums": "{asset}.sha256"
+  },
+  "marknote": {
+    "repository": "laixintao/marknote",
+    "include_prereleases": false,
+    "assets": {
+      "arm": "Marknote-{version}-macos-arm64.dmg",
+      "intel": "Marknote-{version}-macos-x86_64.dmg"
+    },
+    "checksums": "SHA256SUMS.txt"
+  }
+}

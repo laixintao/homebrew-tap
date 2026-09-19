@@ -1,0 +1,51 @@
+name: Update casks
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-casks
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: macos-15
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_ANALYTICS: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Test updater
+        run: python3 -m unittest discover -s tests -v
+      - name: Download and verify upstream releases
+        run: python3 scripts/update_casks.py
+      - name: Register checkout as a tap
+        run: |
+          brew update
+          tap_directory="$(brew --repository)/Library/Taps/laixintao/homebrew-tap"
+          mkdir -p "$(dirname "$tap_directory")"
+          ln -s "$GITHUB_WORKSPACE" "$tap_directory"
+      - name: Check updated casks
+        run: |
+          brew style "$PWD"/Casks/*.rb
+          brew audit --cask --strict --skip-style --tap=laixintao/tap
+      - name: Commit updates
+        run: |
+          if git diff --quiet -- Casks; then
+            echo 'All casks are current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Casks
+          git commit -m 'Update casks from verified upstream releases'
+          git push origin HEAD:main
