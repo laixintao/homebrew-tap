@@ -1,6 +1,6 @@
 cask "ontop" do
-  version "1.3.0"
-  sha256 "1d0c2a59306dcf77165671954be69b22cfc08231c0a61679ae94e6828394c628"
+  version "1.3.1"
+  sha256 "98d8110d92d6804cc4929fd0b3d403cc11796eea46013781919a955e8d1b985e"
 
   url "https://github.com/laixintao/ontop/releases/download/v#{version}/OnTop-#{version}-universal.dmg"
   name "OnTop"
