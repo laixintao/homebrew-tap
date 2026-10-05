@@ -1,6 +1,6 @@
 cask "speaker-timer" do
-  version "1.0.1"
-  sha256 "edaf63a2e6c0269d863c43122a0b11902ae36818ef9f4f102f09bea168068cae"
+  version "1.0.2"
+  sha256 "0a5cb568bc96f5426619a218e153917a8b2e8c214797dc79143c7b51e2f5dddc"
 
   url "https://github.com/laixintao/speaker-timer/releases/download/v#{version}/Speaker-Timer-#{version}-macos-universal.dmg"
   name "Speaker Timer"
