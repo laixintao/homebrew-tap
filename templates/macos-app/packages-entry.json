@@ -1,0 +1,18 @@
+{
+  "example": {
+    "repository": "OWNER/REPOSITORY",
+    "include_prereleases": false,
+    "assets": {
+      "arm": "Product-{version}-macos-arm64.dmg",
+      "intel": "Product-{version}-macos-x86_64.dmg"
+    },
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "arch": {
+        "arm": "arm64",
+        "intel": "x86_64"
+      },
+      "url": "https://github.com/OWNER/REPOSITORY/releases/download/v#{version}/Product-#{version}-macos-#{arch}.dmg"
+    }
+  }
+}

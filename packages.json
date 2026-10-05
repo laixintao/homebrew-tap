@@ -3,18 +3,44 @@
     "repository": "laixintao/ontop",
     "include_prereleases": false,
     "assets": {
-      "universal": "OnTop-{version}-universal.dmg"
+      "universal": "OnTop-{version}-macos-universal.dmg"
     },
-    "checksums": "SHA256SUMS"
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "url": "https://github.com/laixintao/ontop/releases/download/v#{version}/OnTop-#{version}-macos-universal.dmg"
+    },
+    "legacy": {
+      "1.3.2": {
+        "assets": {
+          "universal": "OnTop-{version}-universal.dmg"
+        }
+      }
+    }
   },
   "keycraft": {
     "repository": "laixintao/keycraft",
     "include_prereleases": true,
     "assets": {
-      "arm": "keycraft-{version}-macos-arm64.dmg",
-      "intel": "keycraft-{version}-macos-x64.dmg"
+      "arm": "Keycraft-{version}-macos-arm64.dmg",
+      "intel": "Keycraft-{version}-macos-x86_64.dmg"
     },
-    "checksums": "{asset}.sha256"
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "arch": {
+        "arm": "arm64",
+        "intel": "x86_64"
+      },
+      "url": "https://github.com/laixintao/keycraft/releases/download/v#{version}/Keycraft-#{version}-macos-#{arch}.dmg"
+    },
+    "legacy": {
+      "0.4.1-rc.1": {
+        "assets": {
+          "arm": "keycraft-{version}-macos-arm64.dmg",
+          "intel": "keycraft-{version}-macos-x64.dmg"
+        },
+        "checksums": "{asset}.sha256"
+      }
+    }
   },
   "marknote": {
     "repository": "laixintao/marknote",
@@ -23,6 +49,18 @@
       "arm": "Marknote-{version}-macos-arm64.dmg",
       "intel": "Marknote-{version}-macos-x86_64.dmg"
     },
-    "checksums": "SHA256SUMS.txt"
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "arch": {
+        "arm": "arm64",
+        "intel": "x86_64"
+      },
+      "url": "https://github.com/laixintao/marknote/releases/download/v#{version}/Marknote-#{version}-macos-#{arch}.dmg"
+    },
+    "legacy": {
+      "1.2.1": {
+        "checksums": "SHA256SUMS.txt"
+      }
+    }
   }
 }

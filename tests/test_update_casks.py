@@ -28,11 +28,12 @@ class UpdateTests(unittest.TestCase):
         cask.write_text(re.sub(r'^  version "[^"]+"$', '  version "1.0.0"',
                                (ROOT / "Casks" / cask.name).read_text(), flags=re.MULTILINE))
         self.files = {}
-        for arch, template in package["assets"].items():
+        layout = UPDATER.release_layout(package, version)
+        for arch, template in layout["assets"].items():
             name = template.format(version=version)
             self.files[name] = f"test installer for {arch}".encode()
             digest = hashlib.sha256(self.files[name]).hexdigest()
-            checksum = package["checksums"].format(asset=name, version=version)
+            checksum = layout["checksums"].format(asset=name, version=version)
             self.files[checksum] = self.files.get(checksum, b"") + f"{digest}  {name}\n".encode()
         release = {
             "tag_name": f"v{version}", "draft": False, "prerelease": "-" in version,
@@ -60,11 +61,43 @@ class UpdateTests(unittest.TestCase):
                     self.assertIn(digest, updated)
                 self.assertNotEqual(cask.read_text(), updated)
 
+    def test_standard_release_migrates_cask_contract(self):
+        cask, package, release = self.fixture("keycraft")
+        with patch.object(UPDATER, "gh", side_effect=self.download):
+            updated = UPDATER.prepare_update(cask, package, release)
+        self.assertIn('arch arm: "arm64", intel: "x86_64"', updated)
+        self.assertIn('/Keycraft-#{version}-macos-#{arch}.dmg"', updated)
+
+    def test_current_legacy_release_keeps_its_published_layout(self):
+        for token, version in (("ontop", "1.3.2"), ("keycraft", "0.4.1-rc.1"),
+                               ("marknote", "1.2.1")):
+            with self.subTest(token=token):
+                cask, package, release = self.fixture(token, version)
+                text = re.sub(r'^  version "[^"]+"$', f'  version "{version}"',
+                              cask.read_text(), flags=re.MULTILINE)
+                cask.write_text(text)
+                layout = UPDATER.release_layout(package, version)
+                release_assets = {asset["name"]: asset for asset in release["assets"]}
+                for arch, template in layout["assets"].items():
+                    recorded = re.search(r'[0-9a-f]{64}', re.search(
+                        UPDATER.checksum_pattern(arch), text, re.MULTILINE)[0])[0]
+                    release_assets[template.format(version=version)]["digest"] = "sha256:" + recorded
+                with patch.object(UPDATER, "gh") as download:
+                    self.assertEqual(UPDATER.prepare_update(cask, package, release), text)
+                download.assert_not_called()
+
+    def test_package_configuration_enforces_the_new_contract(self):
+        for token, package in self.packages.items():
+            UPDATER.validate_package(token, package)
+        invalid = dict(self.packages["marknote"], checksums="SHA256SUMS.txt")
+        with self.assertRaisesRegex(ValueError, "must use SHA256SUMS"):
+            UPDATER.validate_package("marknote", invalid)
+
     def test_bad_download_or_manifest_is_rejected(self):
         for corrupt_manifest in (False, True):
             cask, package, release = self.fixture("ontop")
             original = cask.read_text()
-            target = "SHA256SUMS" if corrupt_manifest else "OnTop-9.0.0-universal.dmg"
+            target = "SHA256SUMS" if corrupt_manifest else "OnTop-9.0.0-macos-universal.dmg"
             self.files[target] = b"corrupted"
             with patch.object(UPDATER, "gh", side_effect=self.download), self.assertRaises(ValueError):
                 UPDATER.prepare_update(cask, package, release)

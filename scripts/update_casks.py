@@ -11,6 +11,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 VERSION = re.compile(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z.-]+))?")
+STANDARD_ARCH_NAMES = {"universal": "universal", "arm": "arm64", "intel": "x86_64"}
 
 
 def version_key(version):
@@ -42,6 +43,35 @@ def latest_release(package):
     return json.loads(gh("api", f"repos/{repository}/releases/latest"))
 
 
+def validate_package(token, package):
+    """Keep every new release on the public macOS asset contract."""
+    assets = package.get("assets", {})
+    architectures = set(assets)
+    if architectures not in ({"universal"}, {"arm", "intel"}):
+        raise ValueError(f"{token}: assets must be universal or arm plus intel")
+    for architecture, template in assets.items():
+        suffix = f"-macos-{STANDARD_ARCH_NAMES[architecture]}.dmg"
+        if "{version}" not in template or not template.endswith(suffix):
+            raise ValueError(f"{token}: nonstandard release asset: {template}")
+    if package.get("checksums") != "SHA256SUMS":
+        raise ValueError(f"{token}: new releases must use SHA256SUMS")
+    cask = package.get("cask", {})
+    if not cask.get("url") or "#{version}" not in cask["url"]:
+        raise ValueError(f"{token}: missing standard cask URL")
+    if architectures == {"arm", "intel"}:
+        if cask.get("arch") != {"arm": "arm64", "intel": "x86_64"} or "#{arch}" not in cask["url"]:
+            raise ValueError(f"{token}: split builds must map arm64 and x86_64")
+    for version, override in package.get("legacy", {}).items():
+        if not VERSION.fullmatch(version) or not set(override).issubset({"assets", "checksums"}):
+            raise ValueError(f"{token}: invalid legacy release override: {version}")
+
+
+def release_layout(package, version):
+    layout = {"assets": package["assets"], "checksums": package["checksums"]}
+    layout.update(package.get("legacy", {}).get(version, {}))
+    return layout
+
+
 def replace_once(pattern, replacement, text):
     updated, count = re.subn(pattern, replacement, text, flags=re.MULTILINE)
     if count != 1:
@@ -71,6 +101,16 @@ def expected_checksum(text, asset):
     return matches[0].lower()
 
 
+def update_cask_contract(text, package):
+    cask = package["cask"]
+    if "arch" in cask:
+        architecture = cask["arch"]
+        text = replace_once(r'^  arch arm: "[^"]+", intel: "[^"]+"$',
+                            f'  arch arm: "{architecture["arm"]}", intel: "{architecture["intel"]}"',
+                            text)
+    return replace_once(r'^  url "[^"]+"$', f'  url "{cask["url"]}"', text)
+
+
 def prepare_update(cask, package, release):
     text = cask.read_text()
     current_match = re.search(r'^  version "([^"]+)"$', text, re.MULTILINE)
@@ -85,10 +125,11 @@ def prepare_update(cask, package, release):
         return text
 
     # Resolve every expected asset before downloading or changing any cask.
+    layout = release_layout(package, version)
     assets = {asset["name"]: asset for asset in release["assets"]}
     installers = {arch: template.format(version=version)
-                  for arch, template in package["assets"].items()}
-    checksum_files = {name: package["checksums"].format(version=version, asset=name)
+                  for arch, template in layout["assets"].items()}
+    checksum_files = {name: layout["checksums"].format(version=version, asset=name)
                       for name in installers.values()}
     names = sorted(set(installers.values()) | set(checksum_files.values()))
     for name in names:
@@ -125,6 +166,7 @@ def prepare_update(cask, package, release):
                 raise ValueError(f"GitHub asset digest mismatch for {name}")
             text = replace_once(checksum_pattern(arch),
                                 lambda match: match[1] + digest + match[2], text)
+    text = update_cask_contract(text, package)
     text = replace_once(r'^  version "[^"]+"$', f'  version "{version}"', text)
     print(f"{cask.stem}: {current} -> {version} (all installer checksums verified)")
     return text
@@ -134,6 +176,7 @@ def main():
     packages = json.loads((ROOT / "packages.json").read_text())
     updates = {}
     for token, package in packages.items():
+        validate_package(token, package)
         cask = ROOT / "Casks" / f"{token}.rb"
         updates[cask] = prepare_update(cask, package, latest_release(package))
     # A failed download or checksum leaves every cask untouched.
