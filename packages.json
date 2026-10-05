@@ -1,4 +1,15 @@
 {
+  "speaker-timer": {
+    "repository": "laixintao/speaker-timer",
+    "include_prereleases": false,
+    "assets": {
+      "universal": "Speaker-Timer-{version}-macos-universal.dmg"
+    },
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "url": "https://github.com/laixintao/speaker-timer/releases/download/v#{version}/Speaker-Timer-#{version}-macos-universal.dmg"
+    }
+  },
   "ontop": {
     "repository": "laixintao/ontop",
     "include_prereleases": false,
