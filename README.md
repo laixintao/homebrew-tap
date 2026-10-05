@@ -66,7 +66,9 @@ Cask tests, style checks, and audits run before the workflow commits an update.
 
 New applications should follow the [macOS release and Homebrew onboarding standard](docs/RELEASE_STANDARD.md).
 It defines version tags, asset names, checksum manifests, provenance, immutable publishing,
-and the tap integration checklist. Copyable workflow and configuration examples live under
+the common `make release` command, and the tap integration checklist. Each application's
+`make release` prepares and pushes the next version automatically from a clean `main` branch;
+CI publishes it, and this tap synchronizes afterward. Copyable workflow and configuration examples live under
 [`templates/macos-app`](templates/macos-app).
 
 Release asset patterns and channels are defined in [packages.json](packages.json). The primary

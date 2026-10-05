@@ -4,6 +4,52 @@ This is the release contract for applications distributed by `laixintao/tap`. It
 the public boundary between an application repository and this tap while allowing each project
 to use its own language, build system, signing setup, and test suite.
 
+## Maintainer command
+
+Every application must expose the same daily release entry point:
+
+```sh
+git switch main
+git pull --ff-only
+make release
+```
+
+Commit/merge application changes first. From a clean `main` worktree, plain `make release` must:
+
+1. Check the remote history and tag conflicts before editing files.
+2. Choose the next patch version in the project's existing channel, updating all required version
+   fields automatically. An optional `VERSION=<newer-version>` selects a specific version.
+3. Generate the required changelog/release notes from commit history, or preserve already committed
+   curated notes. Projects using GitHub-generated notes may generate them in the publishing job.
+4. Create a release commit and annotated version tag, then atomically push `main` and that tag.
+5. Print the Actions link and return after pushing. Actions builds and publishes the release;
+   check that workflow before treating the release as available.
+
+No separate `make version`, changelog edit, release commit, tag, upload, or tap edit is required.
+An optional prepare-only command must not change the default behavior of plain `make release`.
+If pushing fails, keep the release commit/tag and print the exact push command to retry. Do not
+run `make release` again to retry the same version. Never move or overwrite a published tag.
+
+| Project | Plain `make release` | Optional explicit version |
+| --- | --- | --- |
+| OnTop | Next stable patch, e.g. `1.3.2` → `1.3.3` | `make release VERSION=1.4.0` |
+| Marknote | Next stable patch, e.g. `1.2.1` → `1.2.2` | `make release VERSION=1.3.0` |
+| Keycraft | Next patch RC, e.g. `0.4.1-rc.1` → `0.4.2-rc.1` | `make release VERSION=0.5.0-rc.1` |
+
+Keycraft's `make rc` remains an optional way to increment the current candidate. It is not a
+required step in the daily SOP. The common command does not change a project's release channel.
+
+After the upstream Release succeeds, the tap checks it on the next six-hour schedule. To sync
+immediately, run [Update casks](https://github.com/laixintao/homebrew-tap/actions/workflows/update-casks.yml)
+manually. Once the cask update is committed, users run `brew update` and
+`brew upgrade --cask laixintao/tap/<token>`.
+
+For new implementations, use the [OnTop release helper](https://github.com/laixintao/ontop/blob/main/scripts/release.py),
+[Marknote helper](https://github.com/laixintao/marknote/blob/main/Scripts/release.py), or
+[Keycraft helper](https://github.com/laixintao/keycraft/blob/main/scripts/bumpversion.cjs) as a reference.
+Test the actual Make target against a disposable local Git remote, including rejected pushes,
+dirty worktrees, version validation, and tag conflicts, without creating a real release.
+
 ## Public release contract
 
 Use SemVer tags with a leading `v`:
@@ -77,7 +123,8 @@ validation, building, artifact verification, and draft publication; its README l
 
 ## Connect a project to this tap
 
-1. Merge and exercise the release workflow in the application repository.
+1. Implement `make release` with the maintainer contract above, then merge and exercise the release
+   workflow in the application repository.
 2. Add `Casks/<token>.rb` with the minimum supported macOS version, bundle name, bundle identifier,
    uninstall behavior, and optional zap paths.
 3. Add the project to `packages.json` using the standard asset names and `SHA256SUMS`. Set
