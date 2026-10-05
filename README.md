@@ -64,8 +64,15 @@ then updates the cask's version and hashes. Missing assets or mismatched checksu
 stop the update before any cask is written. Older releases never downgrade a cask.
 Cask tests, style checks, and audits run before the workflow commits an update.
 
-Release asset patterns and channels are defined in [packages.json](packages.json).
-After adding a cask, add its update configuration there and list it in the table above.
+New applications should follow the [macOS release and Homebrew onboarding standard](docs/RELEASE_STANDARD.md).
+It defines version tags, asset names, checksum manifests, provenance, immutable publishing,
+and the tap integration checklist. Copyable workflow and configuration examples live under
+[`templates/macos-app`](templates/macos-app).
+
+Release asset patterns and channels are defined in [packages.json](packages.json). The primary
+configuration for every app follows the standard contract; exact-version `legacy` entries keep
+already-published releases installable while a project migrates. After adding a cask, add its
+update configuration there and list it in the table above.
 
 Run the local checks with Python 3.9+ and Homebrew:
 
