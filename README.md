@@ -7,6 +7,7 @@ installers published in each project's GitHub Releases and verify their SHA-256 
 
 | App | Description | Requirements | Install |
 | --- | --- | --- | --- |
+| [GazeLift](https://github.com/laixintao/gazelift) | Look-away reminders with expanding screen borders. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/gazelift` |
 | [Keycraft](https://github.com/laixintao/keycraft) | Review and explore Vim and tmux shortcuts. | macOS 12+; Apple Silicon or Intel | `brew install --cask laixintao/tap/keycraft` |
 | [Marknote](https://github.com/laixintao/marknote) | Native Markdown editor with live preview. | macOS 13+; Apple Silicon or Intel | `brew install --cask laixintao/tap/marknote` |
 | [OnTop](https://github.com/laixintao/ontop) | Keep live window previews always on top. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/ontop` |
@@ -15,7 +16,7 @@ installers published in each project's GitHub Releases and verify their SHA-256 
 The fully qualified install commands add this tap automatically. You can also add
 it explicitly with `brew tap laixintao/tap`.
 
-**Release channels:** OnTop, Marknote, and Speaker Timer track stable releases. Keycraft currently
+**Release channels:** GazeLift, OnTop, Marknote, and Speaker Timer track stable releases. Keycraft currently
 ships release candidates, so its cask tracks the newest version, including RCs.
 
 Marknote keeps the original app bundle name supplied by its developer, which is
@@ -49,7 +50,7 @@ To uninstall it while keeping preferences:
 brew uninstall --cask laixintao/tap/ontop
 ```
 
-Replace `ontop` with `keycraft`, `marknote`, or `speaker-timer` for the other apps. To also remove
+Replace `ontop` with `gazelift`, `keycraft`, `marknote`, or `speaker-timer` for the other apps. To also remove
 the app data listed in its cask, use `brew uninstall --cask --zap`; this can delete
 settings and other saved app data.
 
