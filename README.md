@@ -7,11 +7,11 @@ installers published in each project's GitHub Releases and verify their SHA-256 
 
 | App | Description | Requirements | Install |
 | --- | --- | --- | --- |
-| [GazeLift](https://github.com/laixintao/gazelift) | Look-away reminders with expanding screen borders. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/gazelift` |
-| [Keycraft](https://github.com/laixintao/keycraft) | Review and explore Vim and tmux shortcuts. | macOS 12+; Apple Silicon or Intel | `brew install --cask laixintao/tap/keycraft` |
-| [Marknote](https://github.com/laixintao/marknote) | Native Markdown editor with live preview. | macOS 13+; Apple Silicon or Intel | `brew install --cask laixintao/tap/marknote` |
-| [OnTop](https://github.com/laixintao/ontop) | Keep live window previews always on top. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/ontop` |
-| [Speaker Timer](https://github.com/laixintao/speaker-timer) | Always-on-top presentation timer with section checkpoints. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/speaker-timer` |
+| <a href="https://github.com/laixintao/gazelift"><img src="docs/assets/icons/gazelift.png" width="48" height="48" alt=""><br>GazeLift</a> | Look-away reminders with expanding screen borders. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/gazelift` |
+| <a href="https://github.com/laixintao/keycraft"><img src="docs/assets/icons/keycraft.png" width="48" height="48" alt=""><br>Keycraft</a> | Review and explore Vim and tmux shortcuts. | macOS 12+; Apple Silicon or Intel | `brew install --cask laixintao/tap/keycraft` |
+| <a href="https://github.com/laixintao/marknote"><img src="docs/assets/icons/marknote.png" width="48" height="48" alt=""><br>Marknote</a> | Native Markdown editor with live preview. | macOS 13+; Apple Silicon or Intel | `brew install --cask laixintao/tap/marknote` |
+| <a href="https://github.com/laixintao/ontop"><img src="docs/assets/icons/ontop.png" width="48" height="48" alt=""><br>OnTop</a> | Keep live window previews always on top. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/ontop` |
+| <a href="https://github.com/laixintao/speaker-timer"><img src="docs/assets/icons/speaker-timer.png" width="48" height="48" alt=""><br>Speaker Timer</a> | Always-on-top presentation timer with section checkpoints. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/speaker-timer` |
 
 The fully qualified install commands add this tap automatically. You can also add
 it explicitly with `brew tap laixintao/tap`.
