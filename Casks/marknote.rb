@@ -1,9 +1,9 @@
 cask "marknote" do
   arch arm: "arm64", intel: "x86_64"
 
-  version "1.2.2"
-  sha256 arm:   "7a315ebd4c2de4e8ae054599a24643f05b4d9ae0b948af387b923ef591412407",
-         intel: "3a2ecc345c7dae52c6bcd1c6534c7b70358345c5e5d81ee110d053a261a7f550"
+  version "1.2.3"
+  sha256 arm:   "6afdadd27d8a47d8d49ed09ebfac322e1dedbf438aa185a41cb9f95e2a3fcc93",
+         intel: "697e4f432f0a09c1793d4cb66ade6316a45f4828a54827c6bc44ce425920241c"
 
   url "https://github.com/laixintao/marknote/releases/download/v#{version}/Marknote-#{version}-macos-#{arch}.dmg"
   name "Marknote"
