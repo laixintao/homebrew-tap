@@ -1,8 +1,8 @@
 class MouseSpeedKeeper < Formula
   desc "Keep Logitech mouse hardware DPI consistent on macOS"
   homepage "https://github.com/laixintao/MouseSpeedKeeper"
-  url "https://github.com/laixintao/MouseSpeedKeeper/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "bc4922abdc44fa498c8a8e85cea2744ecfe30e4b941a06b3bc6b797764363637"
+  url "https://github.com/laixintao/MouseSpeedKeeper/archive/refs/tags/v0.1.1.tar.gz"
+  sha256 "7a6ed58fa73f1b628d7e126c3cd3559ee7aaeccf775dd37e95ddec2414a837c9"
 
   depends_on xcode: ["14.0", :build]
   depends_on :macos
@@ -29,8 +29,7 @@ class MouseSpeedKeeper < Formula
       After editing configuration:
         brew services restart laixintao/tap/mouse-speed-keeper
 
-      Use a user service, not sudo. Stop the legacy local.mouse-speed-keeper
-      LaunchAgent before starting the Homebrew service. See the project README.
+      Use a user service, not sudo. See the project README for setup.
       Configuration and logs remain in ~/Library/Application Support/MouseSpeedKeeper.
     EOS
   end

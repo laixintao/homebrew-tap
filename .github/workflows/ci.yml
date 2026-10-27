@@ -32,6 +32,12 @@ jobs:
           tap_directory="$(brew --repository)/Library/Taps/laixintao/homebrew-tap"
           mkdir -p "$(dirname "$tap_directory")"
           ln -s "$GITHUB_WORKSPACE" "$tap_directory"
+          if brew commands | /usr/bin/grep -x trust; then
+            brew trust --formula laixintao/tap/mouse-speed-keeper
+            for cask in Casks/*.rb; do
+              brew trust --cask "laixintao/tap/$(basename "$cask" .rb)"
+            done
+          fi
       - name: Check cask style and syntax
         run: |
           brew style "$PWD"/Casks/*.rb
@@ -43,9 +49,6 @@ jobs:
       - name: Check formula and install CLI (no hardware changes)
         run: |
           brew style "$PWD"/Formula/*.rb
-          if brew commands | /usr/bin/grep -qx trust; then
-            brew trust --formula laixintao/tap/mouse-speed-keeper
-          fi
           brew audit --strict --skip-style laixintao/tap/mouse-speed-keeper
           brew install --build-from-source laixintao/tap/mouse-speed-keeper
           brew test laixintao/tap/mouse-speed-keeper

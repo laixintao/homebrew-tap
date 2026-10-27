@@ -28,16 +28,15 @@ displayed in Chinese in Finder.
 
 This package installs `mouse-speed` from source; no bottle is published yet.
 It does not alter DPI, create/overwrite your configuration, or start a service during installation.
-Follow the [project setup and migration guide](https://github.com/laixintao/MouseSpeedKeeper#readme)
+Follow the [project setup guide](https://github.com/laixintao/MouseSpeedKeeper#readme)
 to capture your mouse's identity and configure DPI before starting:
 
 ```sh
 brew services start laixintao/tap/mouse-speed-keeper
 ```
 
-Use a user service (no `sudo`). Stop and disable the old `local.mouse-speed-keeper`
-LaunchAgent before starting the Homebrew service; both use the existing configuration
-and logs in `~/Library/Application Support/MouseSpeedKeeper/`.
+Use a user service (no `sudo`). Configuration and logs live in
+`~/Library/Application Support/MouseSpeedKeeper/`.
 
 Update with `brew upgrade laixintao/tap/mouse-speed-keeper`, then
 `brew services restart laixintao/tap/mouse-speed-keeper`.

@@ -34,6 +34,12 @@ jobs:
           tap_directory="$(brew --repository)/Library/Taps/laixintao/homebrew-tap"
           mkdir -p "$(dirname "$tap_directory")"
           ln -s "$GITHUB_WORKSPACE" "$tap_directory"
+          if brew commands | /usr/bin/grep -x trust; then
+            brew trust --formula laixintao/tap/mouse-speed-keeper
+            for cask in Casks/*.rb; do
+              brew trust --cask "laixintao/tap/$(basename "$cask" .rb)"
+            done
+          fi
       - name: Check updated casks
         run: |
           brew style "$PWD"/Casks/*.rb
