@@ -1,7 +1,8 @@
 # laixintao's Homebrew Tap
 
-Install my macOS apps with [Homebrew](https://brew.sh). Packages download the
-installers published in each project's GitHub Releases and verify their SHA-256 checksums.
+Install my macOS apps and command-line tools with [Homebrew](https://brew.sh).
+Casks download published installers; formulae build versioned source archives.
+Both verify SHA-256 checksums.
 
 ## Available software
 
@@ -12,6 +13,7 @@ installers published in each project's GitHub Releases and verify their SHA-256 
 | <a href="https://github.com/laixintao/marknote"><img src="docs/assets/icons/marknote.png" width="48" height="48" alt=""><br>Marknote</a> | Native Markdown editor with live preview. | macOS 13+; Apple Silicon or Intel | `brew install --cask laixintao/tap/marknote` |
 | <a href="https://github.com/laixintao/ontop"><img src="docs/assets/icons/ontop.png" width="48" height="48" alt=""><br>OnTop</a> | Keep live window previews always on top. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/ontop` |
 | <a href="https://github.com/laixintao/speaker-timer"><img src="docs/assets/icons/speaker-timer.png" width="48" height="48" alt=""><br>Speaker Timer</a> | Always-on-top presentation timer with section checkpoints. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/speaker-timer` |
+| [MouseSpeedKeeper](https://github.com/laixintao/MouseSpeedKeeper) | Keep Logitech hardware DPI consistent; optional user background service. | macOS; Xcode Command Line Tools 14+; compatible Logitech mouse | `brew install laixintao/tap/mouse-speed-keeper` |
 
 The fully qualified install commands add this tap automatically. You can also add
 it explicitly with `brew tap laixintao/tap`.
@@ -22,7 +24,32 @@ ships release candidates, so its cask tracks the newest version, including RCs.
 Marknote keeps the original app bundle name supplied by its developer, which is
 displayed in Chinese in Finder.
 
-## First launch
+## MouseSpeedKeeper (CLI formula)
+
+This package installs `mouse-speed` from source; no bottle is published yet.
+It does not alter DPI, create/overwrite your configuration, or start a service during installation.
+Follow the [project setup and migration guide](https://github.com/laixintao/MouseSpeedKeeper#readme)
+to capture your mouse's identity and configure DPI before starting:
+
+```sh
+brew services start laixintao/tap/mouse-speed-keeper
+```
+
+Use a user service (no `sudo`). Stop and disable the old `local.mouse-speed-keeper`
+LaunchAgent before starting the Homebrew service; both use the existing configuration
+and logs in `~/Library/Application Support/MouseSpeedKeeper/`.
+
+Update with `brew upgrade laixintao/tap/mouse-speed-keeper`, then
+`brew services restart laixintao/tap/mouse-speed-keeper`.
+To uninstall, stop the service first, then `brew uninstall laixintao/tap/mouse-speed-keeper`.
+Your configuration and logs are retained.
+
+The existing `packages.json` and six-hour updater are **cask-only**. This source
+formula is updated explicitly for each immutable upstream release; see
+[the CLI formula release process](docs/CLI_FORMULAS.md). It is not a DMG app and
+does not use the GUI-app release asset contract below.
+
+## First launch (GUI apps)
 
 Current releases of these apps are ad-hoc signed and are not notarized by Apple.
 If macOS blocks an app you trust, attempt to open it, then use **System Settings >

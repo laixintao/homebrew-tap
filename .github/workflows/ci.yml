@@ -40,6 +40,16 @@ jobs:
           done
       - name: Audit cask definitions
         run: brew audit --cask --strict --skip-style --tap=laixintao/tap
+      - name: Check formula and install CLI (no hardware changes)
+        run: |
+          brew style "$PWD"/Formula/*.rb
+          if brew commands | /usr/bin/grep -qx trust; then
+            brew trust --formula laixintao/tap/mouse-speed-keeper
+          fi
+          brew audit --strict --skip-style laixintao/tap/mouse-speed-keeper
+          brew install --build-from-source laixintao/tap/mouse-speed-keeper
+          brew test laixintao/tap/mouse-speed-keeper
+          brew uninstall laixintao/tap/mouse-speed-keeper
       - name: Install and uninstall all apps
         run: |
           brew install --cask --appdir="$RUNNER_TEMP/Applications" \

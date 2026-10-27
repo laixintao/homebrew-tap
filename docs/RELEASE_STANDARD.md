@@ -1,5 +1,8 @@
 # macOS release and Homebrew onboarding standard
 
+This contract covers GUI apps distributed as casks. Source-built CLI formulae
+(such as MouseSpeedKeeper) follow [CLI_FORMULAS.md](CLI_FORMULAS.md) instead.
+
 This is the release contract for applications distributed by `laixintao/tap`. It standardizes
 the public boundary between an application repository and this tap while allowing each project
 to use its own language, build system, signing setup, and test suite.
