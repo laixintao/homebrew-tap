@@ -8,6 +8,7 @@ Both verify SHA-256 checksums.
 
 | App | Description | Requirements | Install |
 | --- | --- | --- | --- |
+| <a href="https://github.com/laixintao/agentdeck"><img src="docs/assets/icons/agentdeck.png" width="48" height="48" alt=""><br>AgentDeck</a> | Monitor local AI agents, live output, context usage, and task status. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/agentdeck` |
 | <a href="https://github.com/laixintao/gazelift"><img src="docs/assets/icons/gazelift.png" width="48" height="48" alt=""><br>GazeLift</a> | Look-away reminders with expanding screen borders. | macOS 14+; Apple Silicon or Intel | `brew install --cask laixintao/tap/gazelift` |
 | <a href="https://github.com/laixintao/keycraft"><img src="docs/assets/icons/keycraft.png" width="48" height="48" alt=""><br>Keycraft</a> | Review and explore Vim and tmux shortcuts. | macOS 12+; Apple Silicon or Intel | `brew install --cask laixintao/tap/keycraft` |
 | <a href="https://github.com/laixintao/marknote"><img src="docs/assets/icons/marknote.png" width="48" height="48" alt=""><br>Marknote</a> | Native Markdown editor with live preview. | macOS 13+; Apple Silicon or Intel | `brew install --cask laixintao/tap/marknote` |
@@ -18,7 +19,7 @@ Both verify SHA-256 checksums.
 The fully qualified install commands add this tap automatically. You can also add
 it explicitly with `brew tap laixintao/tap`.
 
-**Release channels:** GazeLift, OnTop, Marknote, and Speaker Timer track stable releases. Keycraft currently
+**Release channels:** AgentDeck, GazeLift, OnTop, Marknote, and Speaker Timer track stable releases. Keycraft currently
 ships release candidates, so its cask tracks the newest version, including RCs.
 
 Marknote keeps the original app bundle name supplied by its developer, which is
@@ -76,7 +77,7 @@ To uninstall it while keeping preferences:
 brew uninstall --cask laixintao/tap/ontop
 ```
 
-Replace `ontop` with `gazelift`, `keycraft`, `marknote`, or `speaker-timer` for the other apps. To also remove
+Replace `ontop` with `agentdeck`, `gazelift`, `keycraft`, `marknote`, or `speaker-timer` for the other apps. To also remove
 the app data listed in its cask, use `brew uninstall --cask --zap`; this can delete
 settings and other saved app data.
 

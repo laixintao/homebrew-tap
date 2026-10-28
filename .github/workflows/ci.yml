@@ -56,6 +56,6 @@ jobs:
       - name: Install and uninstall all apps
         run: |
           brew install --cask --appdir="$RUNNER_TEMP/Applications" \
-            laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
+            laixintao/tap/agentdeck laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
           brew uninstall --cask \
-            laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
+            laixintao/tap/agentdeck laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer

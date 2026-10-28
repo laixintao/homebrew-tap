@@ -35,6 +35,7 @@ run `make release` again to retry the same version. Never move or overwrite a pu
 
 | Project | Plain `make release` | Optional explicit version |
 | --- | --- | --- |
+| AgentDeck | `bumpversion` next stable patch | `make release VERSION=0.2.0` |
 | OnTop | Next stable patch, e.g. `1.3.2` → `1.3.3` | `make release VERSION=1.4.0` |
 | Marknote | Next stable patch, e.g. `1.2.1` → `1.2.2` | `make release VERSION=1.3.0` |
 | Keycraft | Next patch RC, e.g. `0.4.1-rc.1` → `0.4.2-rc.1` | `make release VERSION=0.5.0-rc.1` |
