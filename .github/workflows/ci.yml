@@ -16,7 +16,8 @@ jobs:
       matrix:
         runner: [macos-15, macos-15-intel]
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 15
+    # Homebrew no longer publishes Intel bottles; tmux's dependencies may build from source.
+    timeout-minutes: ${{ matrix.runner == 'macos-15-intel' && 60 || 15 }}
     env:
       HOMEBREW_NO_AUTO_UPDATE: 1
       HOMEBREW_NO_ANALYTICS: 1
