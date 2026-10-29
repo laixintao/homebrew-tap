@@ -1,9 +1,9 @@
 cask "agentdeck" do
   arch arm: "arm64", intel: "x86_64"
 
-  version "0.1.8"
-  sha256 arm:   "8df3f9bbfeebf753a21bd598e3a6f7b7ae1f0e5ae46b96de917cf791d6af56cc",
-         intel: "42ccd85bec62f5d2f20d285923d1b26fd5a7fcef766e750a8b8a33276322352e"
+  version "0.1.10"
+  sha256 arm:   "0f452cb910d4c4ea2b43d2122fa42dcc48d6b06c0ec3f586529cec4213ca4985",
+         intel: "b725107aba5e31ed41869de92c9485c2e820707a73e8a7165023d5d7820a3e60"
 
   url "https://github.com/laixintao/agentdeck/releases/download/v#{version}/AgentDeck-#{version}-macos-#{arch}.dmg"
   name "AgentDeck"
