@@ -100,5 +100,21 @@
       },
       "url": "https://github.com/laixintao/agentdeck/releases/download/v#{version}/AgentDeck-#{version}-macos-#{arch}.dmg"
     }
+  },
+  "freecell": {
+    "repository": "laixintao/freecell-on-mac",
+    "include_prereleases": false,
+    "assets": {
+      "arm": "FreeCell-{version}-macos-arm64.dmg",
+      "intel": "FreeCell-{version}-macos-x86_64.dmg"
+    },
+    "checksums": "SHA256SUMS",
+    "cask": {
+      "arch": {
+        "arm": "arm64",
+        "intel": "x86_64"
+      },
+      "url": "https://github.com/laixintao/freecell-on-mac/releases/download/v#{version}/FreeCell-#{version}-macos-#{arch}.dmg"
+    }
   }
 }

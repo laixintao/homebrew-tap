@@ -57,6 +57,41 @@ jobs:
       - name: Install and uninstall all apps
         run: |
           brew install --cask --appdir="$RUNNER_TEMP/Applications" \
-            laixintao/tap/agentdeck laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
+            laixintao/tap/agentdeck laixintao/tap/freecell laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
           brew uninstall --cask \
-            laixintao/tap/agentdeck laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
+            laixintao/tap/agentdeck laixintao/tap/freecell laixintao/tap/gazelift laixintao/tap/keycraft laixintao/tap/marknote laixintao/tap/ontop laixintao/tap/speaker-timer
+
+  freecell:
+    name: FreeCell install / ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_ANALYTICS: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test updater and register tap
+        run: |
+          python3 -m unittest discover -s tests -v
+          brew update
+          tap_directory="$(brew --repository)/Library/Taps/laixintao/homebrew-tap"
+          mkdir -p "$(dirname "$tap_directory")"
+          ln -s "$GITHUB_WORKSPACE" "$tap_directory"
+          if brew commands | /usr/bin/grep -x trust; then
+            brew trust --cask laixintao/tap/freecell
+          fi
+      - name: Style and strict audit
+        run: |
+          brew style "$PWD/Casks/freecell.rb"
+          brew audit --cask --strict --skip-style laixintao/tap/freecell
+      - name: Install and uninstall FreeCell
+        run: |
+          brew install --cask --appdir="$RUNNER_TEMP/Applications" laixintao/tap/freecell
+          codesign --verify --deep --strict "$RUNNER_TEMP/Applications/FreeCell.app"
+          brew uninstall --cask laixintao/tap/freecell
